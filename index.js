@@ -1,23 +1,33 @@
-import connectDB from "./db/index.js"
-import dotenv from "dotenv"
-import {app} from "./app.js"
+// import mongoose from "mongoose";
+// import {DB_NAME} from "../constants.js" 
+// import dotenv from "dotenv"
+// dotenv.config({ path: "./.env" }) 
 
-dotenv.config({ path:"./.env"})
+// const connectDB = async () => {
+//   try {
+//     const connectionInstance = await mongoose.connect(`${process.env.MONGODB_URI}/${DB_NAME}`)
+//     console.log(`\n MongoDB connected !! DB HOST:${connectionInstance.connection.host}`);
 
-console.log("MY Name is Harshit");
+//   } catch (error) {
+//     console.log("MONGODB connection error", error);
+//     process.exit(1)
+//   }
+
+// }
+// export default connectDB
+
+import mongoose from "mongoose";
+import { DB_NAME } from "../constants.js";
 
 
+const connectDB = async () => {
+    try {
+        const connectionInstance = await mongoose.connect(`${process.env.MONGODB_URI}/${DB_NAME}`)
+        console.log(`\n MongoDB connected !! DB HOST: ${connectionInstance.connection.host}`);
+    } catch (error) {
+        console.log("MONGODB connection FAILED ", error);
+        process.exit(1)
+    }
+}
 
-connectDB().then(()=>{
-
-    app.listen(process.env.PORT||8000,()=>{
-        console.log(`Server is running at port :${process.env.PORT}`);
-        
-    }),
-    app.get("/",(req,res)=>{
-        res.send("Hello from server");
-    })
-}).catch((err)=>{
-    console.log("MONGO DB connection Failed!!!",err);
-    
-})
+export default connectDB
